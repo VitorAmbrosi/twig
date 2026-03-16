@@ -1,0 +1,18 @@
+<h1>Twig funcionando</h1>
+<hr>
+<p>Eu sou o {{ nome }} e o twig está funcionando.</p>
+
+<p>
+    {% if (legal) %}
+    Tu é top.
+    {% else %}
+    Tu é paia de mais mano.
+    {% endif %}
+</p>
+<p>
+    <ul>
+        {% for disc in disciplinas %}
+        <li>{{disc}}</li>
+        {% endfor %}
+    </ul>
+</p>
