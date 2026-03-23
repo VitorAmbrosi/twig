@@ -1,5 +1,14 @@
 <?php
 
 require('carregar_twig.php');
+require('carregar_pdo.php');
 
-echo $twig->render('jogos.html');
+$jogos = $pdo->query('SELECT * FROM jogos');
+$todosJogos = $jogos->fetchAll(PDO::FETCH_ASSOC);
+// print_r($todosJogos);  die;
+
+
+
+echo $twig->render('jogos.html', [
+    'jogos' => $todosJogos,
+]);
