@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% block conteudo %}
+
+<h2>Excluir jogo</h2>
+<h3>Você está excluindo o {{ jogo.nome }}</h3>
+<br><br>
+Você tem certeza que deseja fazer isso? Essa operação não pode ser desfeita.
+<br><br>
+<div>
+    <form action="jogos_excluir.php" method="post">
+        <input type="hidden" name="id" value="{{ jogo.id }}">
+        <input type="submit" value="Apagar" style="background-color: transparent; border: solid 1px red; color: red; border-radius: 5px; font-size: 18px;">
+    </form>
+    <br>
+    <a href="jogos.php" style="text-decoration: none; border: 1px solid black; border-radius: 5px; color: black; font-size: 18px; padding: 3px;">Cancelar</a>
+</div>
+
+{% endblock %}
