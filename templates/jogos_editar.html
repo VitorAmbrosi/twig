@@ -1,0 +1,35 @@
+{% extends "_base.html" %}
+
+{% block conteudo %}
+
+{% set estilos = {
+    'acao': 'Ação',
+    'tiro': 'Tiro',
+    'rpg': 'RPG',
+} %}
+
+<h3>Editar jogo:</h3>
+
+<h4>Jogo sendo editado: {{ jogo.nome }}</h4>
+<div>
+    <form action="jogos_editar.php" method="get" enctype="multipart/form-data">
+    <input type="hidden" value="{{ jogo.id }}">
+
+    Nome: <input type="text" name="nome" value="{{ jogo.nome }}">
+    <br><br>
+    Estilo: <select name="estilo">
+        <option disabled selected hidden>{{ estilos[jogo.estilo] }}</option>
+        <option value="acao">Ação</option>
+        <option value="tiro">Tiro</option>
+        <option value="rpg">RPG</option>
+    </select>
+    <br><br>
+    Capa: <img src="img/{{ jogo.capa }}" alt="" width="200px">
+    <input type="file" name="capa" value="">
+    <br><br>
+    <input type="submit" value="Editar">
+</form>
+</div>
+
+
+{% endblock %}
