@@ -6,18 +6,35 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     $id = (int) $_POST["id"] ?? false;
     $nome = (string) $_POST["nome"] ?? false;
     $estilo = (string) $_POST["estilo"] ?? false;
-    $capa = (string) $_POST["capa"] ?? false;
 
-    move_uploaded_file($_FILES['capa']['tmp_name'], "img/{$capa}");
+    //verifica se há nova capa
+    if (!$_FILES['capa']['error']) {
+        //descobre nome do arquivo anterior
+        $dados = $pdo->prepare('SELECT capa FROM jogos WHERE id = :id');
+        $dados->execute([':id' => $id]);
+        $capa_velha = $dados->fetch(PDO::FETCH_ASSOC)['capa'];
 
-    if ($id) {
-        $editar = $pdo->prepare('UPDATE jogos SET nome = :nome, estilo = :estilo, capa = :capa WHERE id = :id');
-        $editar->bindParam(':id', $id);
-        $editar->bindParam(':nome', $nome);
-        $editar->bindParam(':estilo', $estilo);
-        $editar->bindParam(':capa', $capa);
-        $editar->execute();
+        //apagar capa
+        $capa_velha = __DIR__ . '/img/' . $capa_velha;
+        if (file_exists($capa_velha)) {
+            unlink($capa_velha);
+        }
+        //gravar capa nova
+        $ext = pathinfo($_FILES['capa']['name'], PATHINFO_EXTENSION);
+        $capa = uniqid().'.'.$ext;
+        move_uploaded_file($_FILES['capa']['tmp_name'], "img/{$capa}");
     }
+
+    $sql = 'UPDATE jogos SET nome = :nome, estilo = :estilo'.(isset($capa) ?', capa = :capa' : ''). 'WHERE id = :id';
+    $dados = $pdo->prepare($sql);
+    $params = [
+        ':id' => $id,
+        ':nome' => $nome,
+        ':estilo' => $estilo,
+    ];
+    if(isset($capa)) $params[':capa'] = $capa;
+    $dados->execute($params);
+
     header('location:jogos.php');
     die;
 }
