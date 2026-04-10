@@ -6,10 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
     // Preparar os dados para inserir no banco de dados
     $nome = $_POST['nome'] ?? false;
     $estilo = $_POST['estilo'] ?? false;
+    $lancamento = $_POST['lancamento'] ?? false;
 
 
     // verifica erro
-    if (!$nome || !$estilo) {
+    if (!$nome || !$estilo || !$lancamento) {
         $erro = '☢️ PREENCHA TODOS OS CAMPOS!!!';
     } else {
         //Tudo certo, grava dados
@@ -24,11 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == 'POST') {
         
 
         require('carregar_pdo.php');
-        $dados = $pdo->prepare('INSERT INTO jogos (nome, estilo, capa) VALUES (?,?,?)');
+        $dados = $pdo->prepare('INSERT INTO jogos (nome, estilo, capa, lancamento) VALUES (?,?,?,?)');
 
         $dados->bindParam(1, $nome);
         $dados->bindParam(2, $estilo);
         $dados->bindParam(3, $capa);
+        $dados->bindParam(4, $lancamento);
 
         $dados->execute();
 
